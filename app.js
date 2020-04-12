@@ -13,8 +13,12 @@ const things = ['My family', 'Programming', 'something'];
 
 app.use(json());
 
-// BodyParser Middleware
+// Middleware
 app.use(bodyParser());
+app.use(router.routes()).use(router.allowedMethods());
+
+// Add additional properties to context
+app.context.user = 'Ken';
 
 // Router Middleware
 // app.use(async (ctx) => (ctx.body = { message: 'Hello world' }));
@@ -52,8 +56,7 @@ async function add(ctx) {
   ctx.redirect('/');
 }
 
-router.get('/test', (ctx) => (ctx.body = 'Hello test'));
-
-app.use(router.routes()).use(router.allowedMethods());
+router.get('/test', (ctx) => (ctx.body = `Hello ${ctx.user}`));
+router.get('/test2/:name', (ctx) => (ctx.body = `Hello ${ctx.params.name}`));
 
 app.listen(3000, () => console.log('Server Started...'));
